@@ -23,36 +23,19 @@ The goal of this project is to build an end-to-end modern data warehouse that in
 
 ## 🏗️ Data Architecture (Medallion Pattern)
 
-The project follows a multi-layered **Medallion Architecture** using PostgreSQL schemas to enforce separation of concerns across data stages:
+The project implements a multi-layered **Medallion Architecture** using PostgreSQL schemas to enforce strict separation of concerns across data stages:
 
-┌───────────────────────────┐
-│ Source Systems: ERP & CRM │
-└─────────────┬─────────────┘
-│ CSV Files
-▼
-┌─────────────────────────┐   Raw Bulk Ingestion
-│   BRONZE LAYER (Raw)    │ ───────────────────────► Direct landing zone for source CSVs
-└────────────┬────────────┘
-│ Data Cleansing & Normalization
-▼
-┌─────────────────────────┐   Data Transformation
-│  SILVER LAYER (Cleaned) │ ───────────────────────► Standardized, cleansed, and joined tables
-└────────────┬────────────┘
-│ Dimensional Modeling (Star Schema)
-▼
-┌─────────────────────────┐   Reporting Readiness
-│  GOLD LAYER (Analytics) │ ───────────────────────► Business-ready Fact & Dimension tables
-└────────────┬────────────┘
-│
-▼
-┌─────────────────────────┐
-│ BI Tools / Dashboards   │ (Power BI / Looker Studio / Metabase / Excel)
-└─────────────────────────┘
+### 1. 🥉 Bronze Layer (`bronze` schema)
+- **Role:** Raw Data Ingestion
+- **Description:** Acts as the landing zone for source CSV files from ERP and CRM systems. Data is ingested as-is without any structural or content modifications using native PostgreSQL `COPY` commands.
 
+### 2. 🥈 Silver Layer (`silver` schema)
+- **Role:** Data Cleansing & Normalization
+- **Description:** Cleanses, standardizes, and validates data. Resolves missing values, trims whitespace, standardizes date formats, and aligns data types before joining datasets.
 
-1. **Bronze Layer (`bronze` schema):** Ingests raw CSV data as-is from ERP and CRM sources without structural changes.
-2. **Silver Layer (`silver` schema):** Cleanses anomalies, normalizes data types, fixes string formatting, and integrates ERP and CRM attributes.
-3. **Gold Layer (`gold` schema):** Models the data into a **Star Schema** with surrogate keys, surrogate relationship mappings, and business measures ready for consumption.
+### 3. 🥇 Gold Layer (`gold` schema)
+- **Role:** Business Dimensional Modeling
+- **Description:** Houses business-ready data structured into a **Star Schema** (Dimension and Fact tables). Optimized for high-performance analytical queries, reporting, and BI dashboard consumption.
 
 ---
 
@@ -82,3 +65,4 @@ The project follows a multi-layered **Medallion Architecture** using PostgreSQL 
 │   ├── silver/               # Cleansing & transformation procedures/functions
 │   ├── gold/                 # Star schema DDL & population scripts
 │   └── tests/                # Automated quality gates and assertion checks
+└── README.md
