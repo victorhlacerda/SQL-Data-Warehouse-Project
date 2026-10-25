@@ -1,0 +1,19 @@
+/* 
+   The purpose of this script is to check if the database 'datawarehouse' 
+   and its Medallion architecture schemas exist, and create them if they do not.
+*/
+
+-- 1. Check if the database exists
+SELECT EXISTS (
+    SELECT 1 
+    FROM pg_database 
+    WHERE datname = 'datawarehouse'
+);
+
+-- 2. Create database 
+CREATE DATABASE datawarehouse;
+
+-- 3. Create Medallion schemas
+CREATE SCHEMA IF NOT EXISTS bronze;
+CREATE SCHEMA IF NOT EXISTS silver;
+CREATE SCHEMA IF NOT EXISTS gold;
