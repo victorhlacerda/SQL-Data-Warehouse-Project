@@ -1,19 +1,12 @@
 /* 
-   The purpose of this script is to check if the database 'datawarehouse' 
-   and its Medallion architecture schemas exist, and create them if they do not.
+   Project: SQL Data Warehouse from Scratch
+   Platform: Google BigQuery
+   
+   The purpose of this script is to check and create the Medallion 
+   architecture datasets (bronze, silver, gold) in Google BigQuery.
 */
 
--- 1. Check if the database exists
-SELECT EXISTS (
-    SELECT 1 
-    FROM pg_database 
-    WHERE datname = 'datawarehouse'
-);
-
--- 2. Create database 
-CREATE DATABASE datawarehouse;
-
--- 3. Create Medallion schemas
-CREATE SCHEMA IF NOT EXISTS bronze;
-CREATE SCHEMA IF NOT EXISTS silver;
-CREATE SCHEMA IF NOT EXISTS gold;
+-- Create datasets for each layer of the Medallion architecture if they don't already exist
+CREATE SCHEMA IF NOT EXISTS `dw-project-sql.bronze`;
+CREATE SCHEMA IF NOT EXISTS `dw-project-sql.silver`;
+CREATE SCHEMA IF NOT EXISTS `dw-project-sql.gold`;
